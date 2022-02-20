@@ -9,7 +9,7 @@ function Categories({ categories, fetchByCategory, fetchProducts }) {
       <div className=" border-b-2 w-10 border-gray-700"></div>
       <div className="grid grid-cols-3 py-8 gap-y-5 gap-x-2 text-xs sm:grid-cols-6  md:flex md:text-sm lg:flex-col ">
         <div
-          className="w-24 flex justify-center items-center bg-gray-900 text-white py-1 hover:cursor-pointer"
+          className="w-24 flex justify-center items-center bg-neutral-700 text-white py-1 hover:cursor-pointer"
           onClick={() => fetchProducts()}
         >
           <p>All</p>

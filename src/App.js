@@ -4,6 +4,7 @@ import MobileNavIcons from './components/MobileNavIcons';
 import Categories from './components/Categories';
 import Products from './components/Products/Products';
 import ProductModal from './components/Modal/ProductModal';
+import Loading from './components/Loading/Loading';
 import { commerce } from './lib/commerce';
 
 function App() {
@@ -14,11 +15,15 @@ function App() {
   const [mobileLinks, setmobileLinks] = useState(false); // mobile nav state
   const mlBtn = () => setmobileLinks(!mobileLinks); // toggle function mobile nav state
 
+  const [loading, setLoading] = useState(false); //loading state
+
   const fetchProducts = async () => {
+    setLoading(true);
     await commerce.products
       .list()
       .then((products) => {
         setProducts(products.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log('There was an error fetching the products', error);
@@ -41,13 +46,14 @@ function App() {
   };
 
   const fetchByCategory = async (category) => {
+    setLoading(true);
     const categoryProducts = await commerce.products
       .list({
         category_slug: [category],
       })
       .then((response) => response.data);
-
     setProducts(categoryProducts);
+    setLoading(false);
   };
 
   const closeModal = () => setModal(false);
@@ -73,7 +79,12 @@ function App() {
           fetchByCategory={fetchByCategory}
           fetchProducts={fetchProducts}
         />
-        <Products products={products} productModal={productModal} />
+
+        {loading ? (
+          <Loading />
+        ) : (
+          <Products products={products} productModal={productModal} />
+        )}
       </div>
       {modalProduct && modal ? (
         <ProductModal item={modalProduct} closeModal={closeModal} />

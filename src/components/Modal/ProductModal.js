@@ -1,13 +1,17 @@
 import React from 'react';
+import Loading from '../Loading/Loading';
 import { useEffect, useState } from 'react';
 
 function ProductModal({ item, closeModal }) {
   const [currentProduct, setcurrentProduct] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     item.map((item) => {
       setcurrentProduct(item.image.url);
     });
+    setLoading(false);
   }, []);
 
   const changeProductImage = (url) => {
@@ -15,27 +19,31 @@ function ProductModal({ item, closeModal }) {
   };
   console.log(item);
   return (
-    <div className="fixed top-0 left-0 w-full h-screen bg-black/[0.2] py-8 overflow-y-auto md:py-5">
+    <div className="fixed top-0 left-0 w-full h-screen bg-black/[0.2] overflow-y-auto p-3 sm:p-7">
       {/*    <p onClick={closeModal} className="text-center text-2xl">
         X
       </p> */}
-      <div className="w-4/5 mx-auto bg-white lg:w-9/12 ">
+      <div className="w-full mx-auto bg-white lg:w-9/12 ">
         <div className="w-full relative">
           <div
             onClick={closeModal}
-            className="absolute right-0 text-right px-5 py-2 text-2xl z-10 text-white lg:text-neutral-700"
+            className="absolute right-0 text-right px-5 py-2 text-2xl z-10 text-white md:text-neutral-700"
           >
             X
           </div>
           {item.map((item, i) => (
             <div key={i} className="w-full md:grid grid-cols-2 md:h-screen">
-              <div className="flex justify-center items-center  relative h-screen w-100 bg-neutral-700 md:h-full md:items-center md:pt-0">
-                <div className="w-80 ">
-                  <img
-                    src={currentProduct}
-                    alt=""
-                    className=" w-full object-contain"
-                  />
+              <div className="flex justify-center items-start  relative h-screen w-100 bg-neutral-700 md:h-full md:items-center md:pt-0">
+                <div className="w-80 mt-14 md:mt-0">
+                  {loading ? (
+                    <Loading />
+                  ) : (
+                    <img
+                      src={currentProduct}
+                      alt=""
+                      className=" w-full h-72 object-contain"
+                    />
+                  )}
                 </div>
                 <div className=" absolute left-0 right-0 bottom-8 px-5 py-2 flex justify-center sm:bottom-5 ">
                   <div className="w-4/5">
