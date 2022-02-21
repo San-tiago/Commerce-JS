@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAlignJustify, faSearch } from '@fortawesome/free-solid-svg-icons';
 import NavIcons from './NavIcons';
-function Navbar({ togglemlLinks }) {
+function Navbar({ togglemlLinks, totalItems }) {
   return (
     <div className="max-w-full bg-white border flex justify-between px-10 py-3 text-gray-700 md:justify-around md:px-6 lg:px-24 lg:justify-between">
       <div className="hidden lg:flex items-center">
@@ -30,7 +30,7 @@ function Navbar({ togglemlLinks }) {
           />
         </div>
       </div>
-      <NavIcons />
+      <NavIcons totalItems={totalItems} />
       <div className="flex items-center justify-center lg:hidden">
         <FontAwesomeIcon
           icon={faAlignJustify}

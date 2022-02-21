@@ -51,13 +51,6 @@ function Products({ products, productModal }) {
                 </div>
               </div> */}
             </div>
-            <div>
-              <div className="text-white text-xs font-bold flex justify-center items-center py-3 md:py-2">
-                <button className="font-bold bg-zinc-800 w-full py-2 md:py-3">
-                  ADD TO CART
-                </button>
-              </div>
-            </div>
           </div>
         ))}
       </div>

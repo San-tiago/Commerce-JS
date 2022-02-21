@@ -2,7 +2,7 @@ import React from 'react';
 import Loading from '../Loading/Loading';
 import { useEffect, useState } from 'react';
 
-function ProductModal({ item, closeModal }) {
+function ProductModal({ item, closeModal, addToCart }) {
   const [currentProduct, setcurrentProduct] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +17,6 @@ function ProductModal({ item, closeModal }) {
   const changeProductImage = (url) => {
     setcurrentProduct(url);
   };
-  console.log(item);
   return (
     <div className="fixed top-0 left-0 w-full h-screen bg-black/[0.2] overflow-y-auto p-3 sm:p-7">
       {/*    <p onClick={closeModal} className="text-center text-2xl">
@@ -80,7 +79,7 @@ function ProductModal({ item, closeModal }) {
                       dangerouslySetInnerHTML={{ __html: item.description }}
                     />
                   </div>
-                  <div className="w-full">
+                  {/*   <div className="w-full">
                     <div className="w-100 py-2 font-semibold text-gray-600">
                       <p>Size</p>
                     </div>
@@ -96,9 +95,12 @@ function ProductModal({ item, closeModal }) {
                         ))
                       )}
                     </div>
-                  </div>
+                  </div> */}
                   <div className="w-100 py-5 mt-4 flex justify-center">
-                    <button className="bg-neutral-700 p-3 text-white w-4/5 font-semibold text-xs">
+                    <button
+                      className="bg-neutral-700 p-3 text-white w-4/5 font-semibold text-xs"
+                      onClick={() => addToCart(item.id)}
+                    >
                       ADD TO CART
                     </button>
                   </div>

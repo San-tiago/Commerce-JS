@@ -17,27 +17,27 @@ function App() {
 
   const [loading, setLoading] = useState(false); //loading state
 
+  const [cart, setCart] = useState({});
+
+  const fetchCart = async () => {
+    setCart(await commerce.cart.retrieve());
+  };
+  const addToCart = async (productID) => {
+    const item = await commerce.cart.add(productID);
+    console.log(item);
+    setCart(item.cart);
+  };
+
   const fetchProducts = async () => {
     setLoading(true);
-    await commerce.products
-      .list()
-      .then((products) => {
-        setProducts(products.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log('There was an error fetching the products', error);
-      });
+    const { data } = await commerce.products.list();
+    setProducts(data);
+    setLoading(false);
   };
   const fetchCategories = async () => {
-    await commerce.categories
-      .list()
-      .then((category) => {
-        setCategories(category.data);
-      })
-      .catch((error) => {
-        console.log('There was an error fetching the products', error);
-      });
+    const { data } = await commerce.categories.list();
+
+    setCategories(data);
   };
 
   const productModal = (product) => {
@@ -47,12 +47,10 @@ function App() {
 
   const fetchByCategory = async (category) => {
     setLoading(true);
-    const categoryProducts = await commerce.products
-      .list({
-        category_slug: [category],
-      })
-      .then((response) => response.data);
-    setProducts(categoryProducts);
+    const { data } = await commerce.products.list({
+      category_slug: [category],
+    });
+    setProducts(data);
     setLoading(false);
   };
 
@@ -61,12 +59,13 @@ function App() {
   useEffect(() => {
     fetchProducts();
     fetchCategories();
+    fetchCart();
   }, []);
-
   return (
     <div>
       <div className="w-full fixed">
-        <Navbar togglemlLinks={mlBtn} />
+        <Navbar togglemlLinks={mlBtn} totalItems={cart.total_items} />
+        {cart.total_items}
         {mobileLinks ? (
           <div className="absolute w-full h-screen transition ease-in-out delay-150">
             <MobileNavIcons />
@@ -83,11 +82,19 @@ function App() {
         {loading ? (
           <Loading />
         ) : (
-          <Products products={products} productModal={productModal} />
+          <Products
+            products={products}
+            productModal={productModal}
+            addToCart={addToCart}
+          />
         )}
       </div>
       {modalProduct && modal ? (
-        <ProductModal item={modalProduct} closeModal={closeModal} />
+        <ProductModal
+          item={modalProduct}
+          closeModal={closeModal}
+          addToCart={addToCart}
+        />
       ) : null}
       {/*       {modalProduct ? modalProduct.map((item) => <p>{item.name}</p>) : null}
        */}{' '}
