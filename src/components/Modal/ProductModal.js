@@ -99,7 +99,7 @@ function ProductModal({ item, closeModal, addToCart }) {
                   <div className="w-100 py-5 mt-4 flex justify-center">
                     <button
                       className="bg-neutral-700 p-3 text-white w-4/5 font-semibold text-xs"
-                      onClick={() => addToCart(item.id)}
+                      onClick={() => addToCart(item.id, 1)}
                     >
                       ADD TO CART
                     </button>

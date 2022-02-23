@@ -1,11 +1,20 @@
-import Navbar from './components/Navbar';
 import { useEffect, useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from 'react-router-dom';
+import { commerce } from './lib/commerce';
+
+import Navbar from './components/Navbar';
 import MobileNavIcons from './components/MobileNavIcons';
 import Categories from './components/Categories';
 import Products from './components/Products/Products';
 import ProductModal from './components/Modal/ProductModal';
 import Loading from './components/Loading/Loading';
-import { commerce } from './lib/commerce';
+import Cart from './components/Cart/Cart';
+import Layout from './components/Layout/Layout';
 
 function App() {
   const [products, setProducts] = useState([]); //products state
@@ -21,11 +30,6 @@ function App() {
 
   const fetchCart = async () => {
     setCart(await commerce.cart.retrieve());
-  };
-  const addToCart = async (productID) => {
-    const item = await commerce.cart.add(productID);
-    console.log(item);
-    setCart(item.cart);
   };
 
   const fetchProducts = async () => {
@@ -53,6 +57,27 @@ function App() {
     setProducts(data);
     setLoading(false);
   };
+  const addToCart = async (productID, quantity) => {
+    const item = await commerce.cart.add(productID);
+    setCart(item.cart);
+  };
+  const removeFromCart = async (id) => {
+    const { cart } = await commerce.cart.remove(id);
+    setCart(cart);
+  };
+
+  const updateCartQty = async (id, quantity) => {
+    if (quantity == 0) {
+      quantity = 1;
+    }
+    const { cart } = await commerce.cart.update(id, { quantity });
+    setCart(cart);
+  };
+
+  const emptyCart = async () => {
+    const { cart } = await commerce.cart.empty();
+    setCart(cart);
+  };
 
   const closeModal = () => setModal(false);
 
@@ -61,44 +86,80 @@ function App() {
     fetchCategories();
     fetchCart();
   }, []);
+
+  console.log(cart);
   return (
-    <div>
+    /*   <div>
       <div className="w-full fixed">
         <Navbar togglemlLinks={mlBtn} totalItems={cart.total_items} />
-        {cart.total_items}
         {mobileLinks ? (
           <div className="absolute w-full h-screen transition ease-in-out delay-150">
             <MobileNavIcons />
           </div>
         ) : null}
-      </div>
-      <div className="px-6 pt-20 sm:px-10 lg:flex lg:pt-28">
-        <Categories
-          categories={categories}
-          fetchByCategory={fetchByCategory}
-          fetchProducts={fetchProducts}
-        />
+      </div> */
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Layout
+                togglemlLinks={mlBtn}
+                totalItems={cart.total_unique_items}
+                mobileLinks={mobileLinks}
+              />
+              <Outlet />
+            </>
+          }
+        >
+          <Route
+            path="/Commerce-JS"
+            element={
+              <>
+                <div className="px-6 pt-20 sm:px-10 lg:flex">
+                  <Categories
+                    categories={categories}
+                    fetchByCategory={fetchByCategory}
+                    fetchProducts={fetchProducts}
+                  />
 
-        {loading ? (
-          <Loading />
-        ) : (
-          <Products
-            products={products}
-            productModal={productModal}
-            addToCart={addToCart}
+                  {loading ? (
+                    <Loading />
+                  ) : (
+                    <Products
+                      products={products}
+                      productModal={productModal}
+                      addToCart={addToCart}
+                    />
+                  )}
+                </div>
+                {modalProduct && modal ? (
+                  <ProductModal
+                    item={modalProduct}
+                    closeModal={closeModal}
+                    addToCart={addToCart}
+                  />
+                ) : null}
+              </>
+            }
           />
-        )}
-      </div>
-      {modalProduct && modal ? (
-        <ProductModal
-          item={modalProduct}
-          closeModal={closeModal}
-          addToCart={addToCart}
-        />
-      ) : null}
-      {/*       {modalProduct ? modalProduct.map((item) => <p>{item.name}</p>) : null}
-       */}{' '}
-    </div>
+          <Route
+            path="/cart"
+            index
+            element={
+              <Cart
+                cart={cart}
+                removeFromCart={removeFromCart}
+                updateCartQty={updateCartQty}
+                emptyCart={emptyCart}
+              />
+            }
+          />
+        </Route>
+      </Routes>
+    </Router>
+    /*   </div> */
   );
 }
 
