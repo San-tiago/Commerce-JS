@@ -5,6 +5,10 @@ import { useEffect, useState } from 'react';
 function ProductModal({ item, closeModal, addToCart }) {
   const [currentProduct, setcurrentProduct] = useState('');
   const [loading, setLoading] = useState(false);
+  const [activeImgId, setActiveImg] = useState('');
+
+  const imgBaseClass =
+    'flex items-center justify-center hover:cursor-pointer py-2'; //bg-neutral-600
 
   useEffect(() => {
     setLoading(true);
@@ -17,6 +21,11 @@ function ProductModal({ item, closeModal, addToCart }) {
   const changeProductImage = (url) => {
     setcurrentProduct(url);
   };
+  const setCurrentImg = (id) => {
+    setActiveImg(id);
+    console.log(imgBaseClass);
+  };
+  console.log(item);
   return (
     <div className="fixed top-0 left-0 w-full h-screen bg-black/[0.2] overflow-y-auto p-3 sm:p-7">
       {/*    <p onClick={closeModal} className="text-center text-2xl">
@@ -49,8 +58,15 @@ function ProductModal({ item, closeModal, addToCart }) {
                     <div className="w-100 flex justify-center space-x-5 overflow-x-auto">
                       {item.assets.map((img) => (
                         <div
-                          className="flex items-center justify-center hover:cursor-pointer hover:bg-neutral-600  py-2"
-                          onClick={() => changeProductImage(img.url)}
+                          className={
+                            activeImgId === img.id
+                              ? imgBaseClass.concat(' bg-neutral-600')
+                              : imgBaseClass
+                          }
+                          onClick={() => {
+                            changeProductImage(img.url);
+                            setCurrentImg(img.id);
+                          }}
                           key={img.id}
                         >
                           <img
