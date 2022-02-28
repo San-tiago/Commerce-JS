@@ -3,10 +3,15 @@ import React from 'react';
 import Navbar from '../Navbar';
 import MobileNavIcons from '../MobileNavIcons';
 
-function Layout({ totalItems }) {
+function Layout({ totalItems, mobileLinks, togglemlLinks }) {
   return (
     <>
-      <Navbar totalItems={totalItems} />
+      <Navbar
+        totalItems={totalItems}
+        mobileLinks={mobileLinks}
+        togglemlLinks={togglemlLinks}
+      />
+      {mobileLinks ? <MobileNavIcons /> : null}
     </>
   );
 }

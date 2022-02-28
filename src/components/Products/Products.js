@@ -6,20 +6,20 @@ function Products({ products, productModal }) {
   return (
     <div className="w-full lg:pl-20">
       <div className="w-full flex space-x-3 text-gray-600 lg:py-8">
-        <FontAwesomeIcon
+        {/*   <FontAwesomeIcon
           icon={faSortAmountDownAlt}
           className="text-xl text-gray-600"
         />
         <div className="flex items-center">
           <p className="font-bold text-xs">Sort By</p>
-        </div>
+        </div> */}
       </div>
 
       {/* PRODUCTS */}
       <div className="w-full grid grid-cols-2 py-10 gap-6 sm:px-10 sm:gap-x-12 md:grid-cols-3 md:gap-x-8 md:gap-y-40 lg:py-0  lg:px-0 lg:gap-x-5 ">
         {products.map((product) => (
           <div
-            className="max-w-full  md:w-60 md:h-72"
+            className="w-full  md:w-60 md:h-72"
             key={product.id}
             onClick={() => productModal(product)}
           >

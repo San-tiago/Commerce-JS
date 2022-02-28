@@ -7,8 +7,6 @@ import {
 } from 'react-router-dom';
 import { commerce } from './lib/commerce';
 
-import Navbar from './components/Navbar';
-import MobileNavIcons from './components/MobileNavIcons';
 import Categories from './components/Categories';
 import Products from './components/Products/Products';
 import ProductModal from './components/Modal/ProductModal';
@@ -67,7 +65,7 @@ function App() {
   };
 
   const updateCartQty = async (id, quantity) => {
-    if (quantity == 0) {
+    if (quantity === 0) {
       quantity = 1;
     }
     const { cart } = await commerce.cart.update(id, { quantity });
